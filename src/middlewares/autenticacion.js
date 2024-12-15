@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import Veterinario from '../models/Veterinario.js'
+import Admin from '../models/Admin.js'
 
 //Método para verificar el Token
 const verificarAutenticacion = async (req,res,next)=>{
@@ -9,8 +9,8 @@ if(!req.headers.authorization) return res.status(404).json({msg:"Lo sentimos, de
     const {authorization} = req.headers
     try {
         const {id,rol} = jwt.verify(authorization.split(' ')[1],process.env.JWT_SECRET)
-        if (rol==="veterinario"){
-            req.veterinarioBDD = await Veterinario.findById(id).lean().select("-password")
+        if (rol==="admin"){
+            req.adminBDD = await Admin.findById(id).lean().select("-password")
             next()
         }
     } catch (error) {
